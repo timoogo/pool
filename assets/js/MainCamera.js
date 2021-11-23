@@ -1,5 +1,6 @@
 import style from '@/css/style.css';
 import * as THREE from 'three'
+import { Color } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
@@ -8,7 +9,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 const geometry = new THREE.BoxGeometry(1.5, 3 ,0.5);
-const material = new THREE.MeshBasicMaterial( { color: 0x41a248 } );
+const material = new THREE.MeshBasicMaterial( { color: new Color({r:20 , g:20 , b:200 }), wireframe:true } );
 const table = new THREE.Mesh( geometry, material );
 
 scene.add( table );
@@ -16,62 +17,61 @@ scene.add( table );
 
 
 camera.position.z = 5;
-let topViewButton = document.getElementById('topView')
 let freeViewButton = document.getElementById('freeView')
+let topViewButton = document.getElementById('topView')
+let resetView = document.getElementById('resetView')
 
 const controls = new OrbitControls( camera, renderer.domElement );
 
-let resetView = document.getElementById('resetView')
 let resetTheView = function(){
     controls.reset()
     camera.position.y = 0
     freeViewButton.disabled = false
-    topViewButton.disabled = false
 }
+const _debugger = document.querySelector('#debugger')
 
 function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
     
     var isDebug = document.querySelector('#is_debug');
-    setInterval(function(){ 
         if(isDebug.checked){
-            debug(true, true, false)
+            debug(true, true, false, true)
             }
-    }, 1000);
-    
-
+            else if(_debugger.checked === false){
+                console.log(false)
+                _debugger.style.display = 'none';
+            }
 }
 resetTheView()
 animate();
 
 
 
-let moveToTop = function () {
-    console.log('tada')
-    topViewButton.disabled = true
-    freeViewButton.disabled = false
-
-    controls.enabled = false;
-}
 let moveToFree = function () {
     freeViewButton.disabled = true
-    topViewButton.disabled = false
     controls.enabled = true;
     console.log('freeview')
+    topViewButton.disabled = false
+
+}
+let switchToTopView = function(){
+    controls.reset()
+    camera.position.y = 0
+    freeViewButton.disabled = false
+    topViewButton.disabled = true
+
 }
 
-topView.onclick = moveToTop
 freeView.onclick = moveToFree
 resetView.onclick = resetTheView
+topViewButton.onclick = switchToTopView 
 /**
  * @param  {boolean} isDebug serves to know if we are in debug mode
  * @param  {boolean} positions serves to know if we want the position of the camera 
  * @param  {boolean} zoom serves to know the zoom level
  */
 function debug(isDebug, positions, zoom){
-    const _debugger = document.querySelector('#debugger')
-    const controls = new OrbitControls( camera, renderer.domElement );
     if(isDebug){
         if(positions){
             _debugger.querySelector('p#xPos').innerHTML = 'x ' + camera.position.x
@@ -83,6 +83,7 @@ function debug(isDebug, positions, zoom){
             _debugger.querySelector('p#zoom').innerHTML =  zoomLevel
            }
     }
+    
 
 
 }
