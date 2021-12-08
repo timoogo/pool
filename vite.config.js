@@ -8,4 +8,7 @@ export default defineConfig({
       '@/js':path.resolve(__dirname, './assets/js')
     },
   },
+  server: {
+    host: true
+  }
 })

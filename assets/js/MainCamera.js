@@ -4,12 +4,28 @@ import {DebuggerGUI} from './GUI.js'
 import * as THREE from 'three'
 import {Ball} from "./models/Ball.js"
 import {Table} from "./models/Table.js"
+
+
+
+
+
+
+
+
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 let color;
 const whiteBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
 	color: "white"
 }))
+const redBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
+	color: "red"
+}))
+// holetest
+const material2 = new THREE.MeshBasicMaterial({color: 0xffff00 });
+const geometry2 = new THREE.CylinderGeometry(20, 20, 24, 30, 30, false);
+const cylinder = new THREE.Mesh(geometry2, material2);
+// end 
 const table = new Table(new THREE.BoxGeometry(150, 300 ,3), new THREE.MeshLambertMaterial({transparent: true }))
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
 
@@ -45,39 +61,47 @@ function Light() {
 
 
 export function init(){
-
-	//console.log(scene.children)
 	camera.position.z = 300;
 	Light();
 	// createSphere()
 	Renderer();
 	document.body.appendChild( renderer.domElement );
 
-	// const geometry = 
+
     const material = new THREE.MeshLambertMaterial({transparent: true });
-	// const mesh = new THREE.Mesh( geometry, material );	
-	// mesh.name = "table_surface"
+	
+	
 	// mesh.position.z = 0 
 	whiteBall.parent = table
+	redBall.position.x= 15
+	redBall.position.z= 10
 	whiteBall.position.z =10 
 	whiteBall.name = 'Boule Blanche'
-	console.log(whiteBall.parent)
+	cylinder.position.x = 15
+	cylinder.position.z = 15
+	// console.log(whiteBall.parent)
 	// const axisHelper = new THREE.AxesHelper()
 
 
-	new DebuggerGUI(table, material, camera, renderer)
-	scene.add( table, whiteBall  );
+	new DebuggerGUI(table,redBall, material, camera, renderer)
+	cylinder.parent = table
+	cylinder.rotation.x = 45
+	scene.add( table, whiteBall, redBall,/* holetest */ cylinder /* end holetest */  );
 	// scene.add( axisHelper);
-	
-
 
 }
 
-
+function  rand (min, max) {
+	return Math.random(min, max)
+}
 export function animate() {
+	redBall.MotionDesign(scene, table, redBall)
+	//console.log(velY)
+	whiteBall.Move(scene, table)
+
+
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
-	whiteBall.Move(scene)
 	window.addEventListener('resize', () =>{
 		renderer.setSize( window.innerWidth, window.innerHeight );
     	

@@ -8,8 +8,15 @@ function d2r(degrees)
   return degrees * (pi/180);
 }
 
-
-function DebuggerGUI(mesh, material, camera, renderer){
+/**
+ * 
+ * @param {*} mesh 
+ * @param {object=} ball optional  
+ * @param {*} material 
+ * @param {*} camera 
+ * @param {*} renderer 
+ */
+function DebuggerGUI(mesh, ball, material, camera, renderer){
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: false});
     gui.domElement.id = 'gui';
@@ -33,16 +40,10 @@ function DebuggerGUI(mesh, material, camera, renderer){
   
     let topView = { topView:function(){
      // mesh.rotation.set(0,0,0)
-     camera.rotation.x+= d2r(90)
      camera.position.set(0,0, 300)
-     console.log(camera.position)
-     
+     camera.rotation.set(0,0, 0)     
       }
-
     };
-    // select the Z world axis
-
-
     let sideView = {sideView: () => {
      console.log(camera.rotation)
       camera.rotation.z+= d2r(90)
@@ -51,14 +52,15 @@ function DebuggerGUI(mesh, material, camera, renderer){
         rotX: mesh.rotation.x,
         rotY: mesh.rotation.y,
         rotZ: mesh.rotation.z,
+        balls: console.log(mesh),
         randomize: _ => {
           //params.rotX = Math.max(0, Math.min(Math.random() * 360, 180))
-          params.rotX = Math.random() * 360;
-          params.rotY = Math.random() * 360;
-          params.rotZ = Math.random() * 360;
-          console.log(params)
-          mesh.rotation.x = params.rotX
+          // params.rotX = Math.random() * 360;
+          params.rotY = Math.random() * d2r(360);
+          params.rotZ = Math.random() * d2r(360);
+          // mesh.rotation.x = params.rotX
           mesh.rotation.y = params.rotY
+
           mesh.rotation.z = params.rotZ
         }
       }
@@ -71,7 +73,28 @@ function DebuggerGUI(mesh, material, camera, renderer){
     rotationFolder.open();
     positionFolder.open();
     resetFolder.open();
-
+   
+   
+    try {
+      if(ball != undefined){
+        
+       // console.log(ball)
+        let ballFolder = gui.addFolder('Ball Folder')
+        let isActive = true
+        ballFolder.add( ball, 'visible' );
+        if(!isActive){
+          ball.visible = false
+        }
+        ballFolder.add(ball.position, 'x', -90, 90)
+        ballFolder.add(ball.position, 'y', -170, 170)
+        ballFolder.open()
+        if(ball.position.x > 75){
+          isActive = false
+        }
+      }
+        } catch (e) {
+      console.log(e)
+        }
 
 }
 
