@@ -1,63 +1,85 @@
-// Simple three.js example
 
-import * as THREE from "https://threejs.org/build/three.module.js";
-import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+const backgroundColor = 0x000000;
 
-var mesh, renderer, scene, camera, controls;
+/*////////////////////////////////////////*/
 
-
-export function init() {
-
-    // renderer
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    document.body.appendChild( renderer.domElement );
-
-    // scene
-    scene = new THREE.Scene();
-    
-    // camera
-    camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.set( 20, 20, 20 );
-
-    // controls
-    controls = new OrbitControls( camera, renderer.domElement );
-    
-    // ambient
-    scene.add( new THREE.AmbientLight( 0x222222 ) );
-    
-    // light
-    var light = new THREE.DirectionalLight( 0xffffff, 1 );
-    light.position.set( 20,20, 0 );
-    scene.add( light );
-    
-    // axes
-    scene.add( new THREE.AxesHelper( 20 ) );
-
-    // geometry
-    var geometry = new THREE.SphereGeometry( 5, 12, 8 );
-    
-    // material
-    var material = new THREE.MeshPhongMaterial( {
-        color: 0x00ffff, 
-        flatShading: true,
-        transparent: true,
-        opacity: 0.7,
-    } );
-    
-    // mesh
-    mesh = new THREE.Mesh( geometry, material );
-    scene.add( mesh );
-    
+var renderCalls = [];
+function render () {
+  requestAnimationFrame( render );
+  renderCalls.forEach((callback)=>{ callback(); });
 }
+render();
 
-export function animate() {
+/*////////////////////////////////////////*/
 
-    requestAnimationFrame( animate );
-    
-    //controls.update();
+var scene = new THREE.Scene();
 
-    renderer.render( scene, camera );
+var camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.1, 800 );
+camera.position.set(0,0,5);
 
-}
+var renderer = new THREE.WebGLRenderer( { antialias: true } );
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setClearColor( backgroundColor );//0x );
+
+// renderer.toneMapping = THREE.LinearToneMapping;
+// renderer.toneMappingExposure = Math.pow( 0.94, 5.0 );
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+
+window.addEventListener( 'resize', function () {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize( window.innerWidth, window.innerHeight );
+}, false );
+
+document.body.appendChild( renderer.domElement);
+
+function renderScene(){ renderer.render( scene, camera ); }
+renderCalls.push(renderScene);
+
+/* ////////////////////////////////////////////////////////////////////////// */
+
+const controls = new OrbitControls( camera, renderer.domElement );
+
+controls.rotateSpeed = 0.3;
+controls.zoomSpeed = 0.9;
+
+
+controls.minPolarAngle = 0; // radians
+controls.maxPolarAngle = Math.PI /2; // radians
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+renderCalls.push(function(){
+  controls.update()
+});
+
+
+/* ////////////////////////////////////////////////////////////////////////// */
+
+
+var light = new THREE.PointLight( 0xffffcc, 20, 200 );
+light.position.set( 4, 30, -20 );
+scene.add( light );
+
+var light2 = new THREE.AmbientLight( 0x20202A, 20, 100 );
+light2.position.set( 30, -10, 30 );
+scene.add( light2 );
+
+/* ////////////////////////////////////////////////////////////////////////// */
+
+
+
+const loader = new GLTFLoader();
+loader.crossOrigin = true;
+loader.load( '../../models/obj/Pool.glb', function ( data ) {
+
+    var object = data.scene;
+     object.position.set(0, 0, 0);
+    scene.add( object );
+});

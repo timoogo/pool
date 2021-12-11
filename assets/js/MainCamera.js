@@ -1,61 +1,16 @@
-import style from '@/css/style.css';
 import {DebuggerGUI} from './GUI.js'	
 
 import * as THREE from 'three'
 import {Ball} from "../../models/Ball.js"
+
 // import {Table} from "./models/Table.js"
-
-
-import { OBJLoader } from './jsm/loaders/OBJLoader.js';
-import { MTLLoader } from './jsm/loaders/MTLoader.js'
-
-let table
-function loadModel() {
-
-	table.traverse( function ( child ) {
-
-		if ( child.isMesh ) child.material.map = texture;
-
-	} );
-
-	table.position.y = - 95;
-	scene.add( table );
-
-}
-
-const manager = new THREE.LoadingManager( loadModel );
-
-manager.onProgress = function ( item, loaded, total ) {
-
-	console.log( item, loaded, total );
-
-};
-
-// texture
-
-const mtlLoader = new MTLLoader( manager );
-const texture = mtlLoader.load( 'models/obj/Pool.mtl' );
-
-
-function onProgress( xhr ) {
-
-	if ( xhr.lengthComputable ) {
-
-		const percentComplete = xhr.loaded / xhr.total * 100;
-		console.log( 'model ' + Math.round( percentComplete, 2 ) + '% downloaded' );
-
-	}
-
-}
-function onError() {}
-
-const loader = new OBJLoader( manager );
-loader.load( 'models/obj/Pool.obj', function ( obj ) {
-	table = obj;
-}, onProgress, onError );
-
+import { AxesHelper } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
+
+
+
 let color;
 const whiteBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
 	color: "white"
@@ -65,6 +20,11 @@ const redBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLamber
 }))
 // const table = new Table(new THREE.BoxGeometry(150, 300 ,3), new THREE.MeshLambertMaterial({transparent: true }))
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
+
+
+
+
+
 
 
 function Renderer() {
@@ -97,35 +57,52 @@ function Light() {
 
 
 export function init(){
-	camera.position.z = 300;
+	
+	const loader = new GLTFLoader();
+	loader.crossOrigin = true;
+	loader.load( '../../models/obj/Pool.glb', function ( data ) {
+	
+	  
+		var object = data.scene;
+		 object.position.set(0, 0, 0);
+		 object.scale.set(10, 10, 10)
+	//     object.rotation.set(Math.PI / -2, 0, 0);
+	
+	//     TweenLite.from( object.rotation, 1.3, {
+	//       y: Math.PI * 2,
+	//       ease: 'Power3.easeOut'
+	//     });
+		//object.position.y = - 95;
+		scene.add( object );
+	  //, onProgress, onError );
+	});
 	Light();
-	// createSphere()
 	Renderer();
 	document.body.appendChild( renderer.domElement );
 
 
     const material = new THREE.MeshLambertMaterial({transparent: true });
-
-	redBall.position.y = -86
-	whiteBall.position.z =10 
+	// redBall.position.y = -86
+	whiteBall.position.z =0 
 	whiteBall.name = 'Boule Blanche'
-	// const axisHelper = new THREE.AxesHelper()
+	console.log(whiteBall.position, )
+	const axisHelper = new THREE.AxesHelper()
 
 
-	new DebuggerGUI(/* table, */ whiteBall,  redBall, material, camera, renderer)
+	 new DebuggerGUI(/* table, */ whiteBall,  redBall, material, camera, renderer)
 	
-	scene.add( /* table,*/ whiteBall, redBall  );
-	// scene.add( axisHelper);
+	// scene.add( /* table,*/ whiteBall, redBall  );
+	 scene.add( axisHelper);
+
+	 camera.position.z += 5
 
 }
 
-function  rand (min, max) {
-	return Math.random(min, max)
-}
+
 export function animate() {
-	redBall.MotionDesign(scene, /*table,*/  redBall)
-	//console.log(velY)
-	whiteBall.Move(scene, /* table */)
+	// redBall.MotionDesign(scene, /*table,*/  redBall)
+	// console.log(velY)
+	// whiteBall.Move(scene, /* table */)
 
 
 	requestAnimationFrame( animate );

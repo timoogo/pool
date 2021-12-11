@@ -5,3 +5,4 @@
  MC.init()
  MC.animate()
 
+//import * as t from './test'
