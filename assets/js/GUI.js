@@ -18,7 +18,7 @@ function degrees_to_radians(degrees)
  * @param {*} camera 
  * @param {*} renderer 
  */
-function DebuggerBallGUI(camera, renderer, obj){
+function DebuggerBallGUI(camera, renderer, obj, openFolder = true){
   console.log(obj.name)
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: true});
@@ -28,12 +28,15 @@ function DebuggerBallGUI(camera, renderer, obj){
     ballFolder.add(obj, 'visible').name("Display")
     ballFolder.add(obj.position, 'x', -140, 140).listen();
     ballFolder.add(obj.position, 'z', -90, 90).listen();
-    ballFolder.open()
+    if(openFolder){
+      ballFolder.open()
+    }
 
 }
-function CameraGUI(camera, renderer){
+function CameraGUI(camera, renderer, openFolder = true){
   const controls = new OrbitControls( camera, renderer.domElement );
   const gui = new GUI({autoplace: true});
+  
   gui.domElement.id = camera.name.replace(/\s/g, '')
   gui.name = camera.name + ' options'
   const cameraFolder = gui.addFolder('camera options')
@@ -54,7 +57,10 @@ function CameraGUI(camera, renderer){
    
   cameraFolder.add(topView, 'topView')
   cameraFolder.add(rotateClockWise, 'rotateClockWise').name ('Rotate by 90 deg')
-  cameraFolder.open()
+  if(openFolder){
+    cameraFolder.open()
+
+  }
 }
 
 

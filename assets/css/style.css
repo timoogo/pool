@@ -27,3 +27,6 @@ body{
   background-color: rgb(93, 30, 220);
   color: #fff;
 }
+.close-button.close-bottom {
+  display: none;
+}
