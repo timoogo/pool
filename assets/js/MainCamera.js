@@ -99,7 +99,9 @@ export function init(){
 
 
 }
-
+function randomIntFromInterval(min, max) { // min and max included 
+	return Math.floor(Math.random() * (max - min + 1) + min)
+  }
 function BallChecker(ball) {
 	let top_right_pocket = new Vector3(-140, 0, -90)
 	let top_left_pocket = new Vector3(-140, 0, 90)
@@ -108,71 +110,87 @@ function BallChecker(ball) {
 	let bottom_right_pocket = new Vector3(140, 0, -90)
 	let bottom_left_pocket = new Vector3(140, 0, 90)
 
+	
 	// if(ball.position.x !=140 )
 
 	if(ball.visible){
 		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z ){
 			console.log('Ball felt in the top right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name,  " top right pocket")
+			ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z ){
 			console.log('Ball felt in the top left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " top left pocket")
+				ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z ){
 			console.log('Ball felt in the middle left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " middle left pocket")
+				ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z ){
 			console.log('Ball felt in the middle right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " middle right pocket")
+				ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z ){
 			console.log('Ball felt in the bottom left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " bottom right pocket")
+				ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z ){
 			console.log('Ball felt in the bottom right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
-			ball.position.x = 0
-			ball.position.z = 0
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " bottomleft pocket")
+				ball.position.x = randomIntFromInterval(-120, 120)
+			ball.position.z =  randomIntFromInterval(-90, 90)
 			ball.visible = true
 		} 
 	}
 }
-function renderEvent(source){
+function renderEvent(source, ball, hole){
 
-	var img = document.createElement('img');
+	let img = document.createElement('img');
+	let txt = document.createElement('p')
 	img.src = source;
+	txt.innerHTML = ball + " in pocket" + hole 
 	document.getElementById('container').appendChild(img);
+	document.getElementById('container').appendChild(txt);
 	img.style.zIndex = "100000"
 	img.style.position = "fixed"
 	img.style.top = "50%"
 	img.style.left = "50%"
 	img.style.transform = "translate(-50%, -50%)"
+	//
+	txt.style.zIndex = "100000"
+	txt.style.position = "fixed"
+	txt.style.top = "75%"
+	txt.style.left = "50%"
+	txt.style.transform = "translate(-50%, -50%)"
+	txt.style.color = "white"
+	txt.style.fontSize = "2rem"
+	txt.style.marginTop = "3rem"
+
+
 	setTimeout(()=>{
 		img.remove()
+		txt.remove()
 	}, 2000)
 
 }
