@@ -16,7 +16,7 @@ function d2r(degrees)
  * @param {*} camera 
  * @param {*} renderer 
  */
-function DebuggerGUI(mesh, ball, material, camera, renderer){
+function DebuggerGUI(ball,mesh, material, camera, renderer){
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: false});
     gui.domElement.id = 'gui';
@@ -79,14 +79,14 @@ function DebuggerGUI(mesh, ball, material, camera, renderer){
       if(ball != undefined){
         
        // console.log(ball)
-        let ballFolder = gui.addFolder('Ball Folder')
+        let ballFolder = gui.addFolder(`ballFolder ${ball}`)
         let isActive = true
         ballFolder.add( ball, 'visible' );
         if(!isActive){
           ball.visible = false
         }
-        ballFolder.add(ball.position, 'x', -90, 90)
-        ballFolder.add(ball.position, 'y', -170, 170)
+        ballFolder.add(ball.position, 'x', -140, 140)
+        ballFolder.add(ball.position, 'z', -90, 90)
         ballFolder.open()
         if(ball.position.x > 75){
           isActive = false
@@ -101,3 +101,4 @@ function DebuggerGUI(mesh, ball, material, camera, renderer){
 
 
 export {DebuggerGUI}
+ 

@@ -1,11 +1,11 @@
 import {DebuggerGUI} from './GUI.js'	
-
 import * as THREE from 'three'
 import {Ball} from "../../models/Ball.js"
 
 // import {Table} from "./models/Table.js"
 import { AxesHelper } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { object } from 'joi';
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 
@@ -22,11 +22,6 @@ const redBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLamber
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
 
 
-
-
-
-
-
 function Renderer() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setClearColor(0x333F47, 1);
@@ -34,47 +29,41 @@ function Renderer() {
 }
 
 function Light() {
-	var object3d = new THREE.DirectionalLight(0x93C54B, 0.55);
-	object3d.position.set(0, 30, 200);
-	object3d.name = 'Back light';
-	object3d = new THREE.DirectionalLight('white', 0.35);
-	object3d.position.set(-6, -3, 0);
-	object3d.name = 'Key light';
-	object3d = new THREE.DirectionalLight('white', 0.55);
-	object3d.position.set(9, 9, 6);
-	object3d.name = 'Fill light';
-	var spotLight = new THREE.SpotLight(0xffffff);
-	spotLight.position.set(3, 30, 3);
+	let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
+	backLight.position.set(0, 700, 200);
+	backLight.name = 'Back light';
+	let key_light = new THREE.DirectionalLight('white', 0.35);
+	key_light.position.set(-6, -3, 0);
+	key_light.name = 'Key light';
+	let fill_light = new THREE.DirectionalLight('white', 0.10);
+	fill_light.position.set(9, 9, 6);
+	fill_light.name = 'Fill light';
+	let spotLight = new THREE.SpotLight(0xffffff);
+	spotLight.position.set(3, 700, 3);
 	spotLight.castShadow = true;
-	var backLight = new THREE.SpotLight(0x000000);
-	backLight.position.set(0, 30, -300);
-	backLight.castShadow = true;
 	const groupLight = new THREE.Group();
-	groupLight.add(spotLight, backLight, object3d)
+	groupLight.add(spotLight, backLight, key_light, fill_light)
 	scene.add(groupLight);
 	groupLight.name = "Lighting"
 }
 
 
 export function init(){
-	
+	camera.position.y = 1000
 	const loader = new GLTFLoader();
 	loader.crossOrigin = true;
 	loader.load( '../../models/obj/Pool.glb', function ( data ) {
-	
+		
 	  
-		var object = data.scene;
-		 object.position.set(0, 0, 0);
-		 object.scale.set(10, 10, 10)
-	//     object.rotation.set(Math.PI / -2, 0, 0);
-	
-	//     TweenLite.from( object.rotation, 1.3, {
-	//       y: Math.PI * 2,
-	//       ease: 'Power3.easeOut'
-	//     });
-		//object.position.y = - 95;
-		scene.add( object );
+		const object = data.scene;
+		object.position.set(0, 0, 0);
+		 object.scale.set(1000, 1000, 1000)
+			console.log(object.scale)
+			scene.add( object );
+			
 	  //, onProgress, onError );
+	  whiteBall.position.y = object.position.y + 11
+	  redBall.position.y = object.position.y + 11
 	});
 	Light();
 	Renderer();
@@ -82,28 +71,25 @@ export function init(){
 
 
     const material = new THREE.MeshLambertMaterial({transparent: true });
-	// redBall.position.y = -86
-	whiteBall.position.z =0 
+	scene.add(  whiteBall  );
+	//whiteBall.position.set(0, 0, 1)
 	whiteBall.name = 'Boule Blanche'
-	console.log(whiteBall.position, )
-	const axisHelper = new THREE.AxesHelper()
-
-
-	 new DebuggerGUI(/* table, */ whiteBall,  redBall, material, camera, renderer)
 	
-	// scene.add( /* table,*/ whiteBall, redBall  );
-	 scene.add( axisHelper);
+	// const axisHelper = new THREE.AxesHelper()
+	new DebuggerGUI(/* table, */ whiteBall,  redBall, material, camera, renderer)
+	// console.log(scene)
+	// scene.add( axisHelper);
 
-	 camera.position.z += 5
+
 
 }
 
 
 export function animate() {
+	
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
-	// console.log(velY)
 	// whiteBall.Move(scene, /* table */)
-
+	console.log(camera.position.x, camera.position.y, camera.position.z)
 
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
