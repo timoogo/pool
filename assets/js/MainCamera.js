@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import {Ball} from "../../models/Ball.js"
 
 // import {Table} from "./models/Table.js"
-import { AxesHelper } from 'three';
+import { AxesHelper, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { object } from 'joi';
 const renderer = new THREE.WebGLRenderer();
@@ -84,9 +84,38 @@ export function init(){
 
 }
 function BallChecker(ball) {
+	let top_right_pocket = new Vector3(-140, 0, -90)
+	let top_left_pocket = new Vector3(-140, 0, 90)
+	let middle_left_pocket = new Vector3(0, 0, 90)
+	let middle_right_pocket = new Vector3(0, 0, -90)
+	let bottom_right_pocket = new Vector3(140, 0, -90)
+	let bottom_left_pocket = new Vector3(140, 0, 90)
+
+	// if(ball.position.x !=140 )
+
 	if(ball.visible){
-		if (ball.position.x == -140 && ball.position.z == -90 ){
-			console.log('not on the table')
+		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z ){
+			console.log('Ball felt in the top right pocket', )
+			ball.visible = false
+		} 
+		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z ){
+			console.log('Ball felt in the top left pocket', )
+			ball.visible = false
+		} 
+		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z ){
+			console.log('Ball felt in the middle left pocket', )
+			ball.visible = false
+		} 
+		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z ){
+			console.log('Ball felt in the middle right pocket', )
+			ball.visible = false
+		} 
+		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z ){
+			console.log('Ball felt in the bottom left pocket', )
+			ball.visible = false
+		} 
+		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z ){
+			console.log('Ball felt in the bottom right pocket', )
 			ball.visible = false
 		} 
 	}
