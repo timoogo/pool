@@ -11,11 +11,19 @@ body{
 
 }
 
-/* canvas#bg{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc((100%) - 1vw);
-  height: 100vh;
-  border: 1px solid red;
-} */
+#Whiteball > ul > li > div > ul > li.title {
+  background-color: #fff;
+  color: #000;
+}
+#Redball > ul > li > div > ul > li.title {
+  background-color: rgb(255, 0, 0);
+  color: #000;
+}
+#Yellowball > ul > li > div > ul > li.title {
+  background-color: rgb(211, 220, 30);
+  color: #000;
+}
+#MainCamera > ul > li > div > ul > li.title {
+  background-color: rgb(93, 30, 220);
+  color: #fff;
+}

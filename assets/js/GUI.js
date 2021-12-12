@@ -1,12 +1,14 @@
 import { GUI } from 'https://cdn.jsdelivr.net/npm/three@0.127/examples/jsm/libs/dat.gui.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { DEG2RAD } from 'three/src/math/MathUtils';
 
 
-function d2r(degrees)
+function degrees_to_radians(degrees)
 {
   var pi = Math.PI;
   return degrees * (pi/180);
 }
+
 
 /**
  * 
@@ -16,89 +18,45 @@ function d2r(degrees)
  * @param {*} camera 
  * @param {*} renderer 
  */
-function DebuggerGUI(ball,mesh, material, camera, renderer){
+function DebuggerBallGUI(camera, renderer, obj){
+  console.log(obj.name)
     const controls = new OrbitControls( camera, renderer.domElement );
-    const gui = new GUI({autoplace: false});
-    gui.domElement.id = 'gui';
-    
-    
-    const debuggerFolder = gui.addFolder('Debugger')
-    debuggerFolder.add( material, 'wireframe' );
-    //Rotation
-    const rotationFolder = debuggerFolder.addFolder('Rotation')
-    rotationFolder.add(mesh.rotation, 'x', -Math.PI/2, Math.PI/2)
-    rotationFolder.add(mesh.rotation, 'y', -Math.PI/2, Math.PI/2)
-    rotationFolder.add(mesh.rotation, 'z', -Math.PI/2, Math.PI/2)
-    //Position
-    const positionFolder = debuggerFolder.addFolder('Position')
-    positionFolder.add(mesh.position, 'x', -5, 5)
-    positionFolder.add(mesh.position, 'y', -2, 2)
-    positionFolder.add(mesh.position, 'z', - Math.PI * 2, camera.position.z+2.5)
-    const resetFolder = debuggerFolder.addFolder('Reset')
+    const gui = new GUI({autoplace: true});
+    gui.domElement.id = obj.name.replace(/\s/g, '')
+    gui.name = obj.name
+    const ballFolder = gui.addFolder(obj.name + ' options')
+    ballFolder.add(obj, 'visible').name("Display")
+    ballFolder.add(obj.position, 'x', -140, 140).listen();
+    ballFolder.add(obj.position, 'z', -90, 90).listen();
+    ballFolder.open()
 
+}
+function CameraGUI(camera, renderer){
+  const controls = new OrbitControls( camera, renderer.domElement );
+  const gui = new GUI({autoplace: true});
+  gui.domElement.id = camera.name.replace(/\s/g, '')
+  gui.name = camera.name + ' options'
+  const cameraFolder = gui.addFolder('camera options')
 
   
-    let topView = { topView:function(){
-     // mesh.rotation.set(0,0,0)
-     camera.position.set(0,0, 300)
-     camera.rotation.set(0,0, 0)     
-      }
-    };
-    let sideView = {sideView: () => {
-     console.log(camera.rotation)
-      camera.rotation.z+= d2r(90)
-    }}
-    let params = {
-        rotX: mesh.rotation.x,
-        rotY: mesh.rotation.y,
-        rotZ: mesh.rotation.z,
-        balls: console.log(mesh),
-        randomize: _ => {
-          //params.rotX = Math.max(0, Math.min(Math.random() * 360, 180))
-          // params.rotX = Math.random() * 360;
-          params.rotY = Math.random() * d2r(360);
-          params.rotZ = Math.random() * d2r(360);
-          // mesh.rotation.x = params.rotX
-          mesh.rotation.y = params.rotY
+  let topView = { topView:function(){
+  //  controls.reset()
 
-          mesh.rotation.z = params.rotZ
-        }
-      }
-    resetFolder.add(params, "randomize");      
-    resetFolder.add(topView, 'topView')
-    resetFolder.add(sideView, 'sideView')
-
-
-    debuggerFolder.open();
-    rotationFolder.open();
-    positionFolder.open();
-    resetFolder.open();
+  camera.position.set(0,300,0)
+  camera.lookAt(0,0,0)
+    }
+  };
+  let rotateClockWise = {rotateClockWise: function() {
+    console.log(camera.rotation.z) 
+      camera.rotation.z += degrees_to_radians(90);
+      console.log(camera.rotation.z) 
+  }}
    
-   
-    try {
-      if(ball != undefined){
-        
-       // console.log(ball)
-        let ballFolder = gui.addFolder(`ballFolder ${ball}`)
-        let isActive = true
-        ballFolder.add( ball, 'visible' );
-        if(!isActive){
-          ball.visible = false
-        }
-        ballFolder.add(ball.position, 'x', -140, 140)
-        ballFolder.add(ball.position, 'z', -90, 90)
-        ballFolder.open()
-        if(ball.position.x > 75){
-          isActive = false
-        }
-      }
-        } catch (e) {
-      console.log(e)
-        }
-
+  cameraFolder.add(topView, 'topView')
+  cameraFolder.add(rotateClockWise, 'rotateClockWise').name ('Rotate by 90 deg')
+  cameraFolder.open()
 }
 
 
-
-export {DebuggerGUI}
+export {DebuggerBallGUI, CameraGUI}
  

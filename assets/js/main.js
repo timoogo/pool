@@ -1,8 +1,6 @@
- import * as MC from './MainCamera.js'
-// import * as _debbuger from './Debbuger.js'
-// import * as THREE from 'three'
+ import {init, animate} from './MainCamera.js'
 
- MC.init()
- MC.animate()
+ init()
+ animate()
 
 //import * as t from './test'

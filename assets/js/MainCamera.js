@@ -1,11 +1,11 @@
-import {DebuggerGUI} from './GUI.js'	
+import {DebuggerBallGUI, CameraGUI} from './GUI.js'	
 import * as THREE from 'three'
 import {Ball} from "../../models/Ball.js"
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // import {Table} from "./models/Table.js"
 import { AxesHelper, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { object } from 'joi';
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 
@@ -18,8 +18,17 @@ const whiteBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLamb
 const redBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
 	color: "red"
 }))
+const yellowBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
+	color: "yellow"
+}))
+const groupBalls = new THREE.Group();
+groupBalls.add(whiteBall, redBall, yellowBall)
+groupBalls.name = 'Balls'
 // const table = new Table(new THREE.BoxGeometry(150, 300 ,3), new THREE.MeshLambertMaterial({transparent: true }))
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
+ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
+camera.name = "Main Camera"
+const controls = new OrbitControls( camera, renderer.domElement );
+
 
 
 function Renderer() {
@@ -32,10 +41,10 @@ function Light() {
 	let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
 	backLight.position.set(0, 700, 200);
 	backLight.name = 'Back light';
-	let key_light = new THREE.DirectionalLight('white', 0.35);
+	let key_light = new THREE.DirectionalLight('white', 0.0);
 	key_light.position.set(-6, -3, 0);
 	key_light.name = 'Key light';
-	let fill_light = new THREE.DirectionalLight('white', 0.10);
+	let fill_light = new THREE.DirectionalLight('white', 0.0);
 	fill_light.position.set(9, 9, 6);
 	fill_light.name = 'Fill light';
 	let spotLight = new THREE.SpotLight(0xffffff);
@@ -47,23 +56,25 @@ function Light() {
 	groupLight.name = "Lighting"
 }
 
-
 export function init(){
-	camera.position.y = 1000
+
+	camera.position.y = 300
 	const loader = new GLTFLoader();
 	loader.crossOrigin = true;
-	loader.load( '../../models/obj/Pool.glb', function ( data ) {
-		
-	  
+	loader.load( '../../models/obj/PoolMatte.glb', function ( data ) {
 		const object = data.scene;
 		object.position.set(0, 0, 0);
 		 object.scale.set(1000, 1000, 1000)
-			console.log(object.scale)
+		//	console.log(object.scale)
 			scene.add( object );
 			
 	  //, onProgress, onError );
 	  whiteBall.position.y = object.position.y + 11
 	  redBall.position.y = object.position.y + 11
+	  yellowBall.position.y = object.position.y + 11
+	  redBall.position.x = 140
+	  const cameraGUI = new CameraGUI(camera, renderer)
+
 	});
 	Light();
 	Renderer();
@@ -71,18 +82,24 @@ export function init(){
 
 
     const material = new THREE.MeshLambertMaterial({transparent: true });
-	scene.add(  whiteBall  );
 	//whiteBall.position.set(0, 0, 1)
-	whiteBall.name = 'Boule Blanche'
+	whiteBall.name = 'White ball'
+	yellowBall.name = 'Yellow ball'
+	redBall.name = "Red ball"
+	scene.add(  groupBalls  );
 	
+	const whiteBallGUI =  new DebuggerBallGUI(camera, renderer, whiteBall)
+	 const redBallGUI =  new DebuggerBallGUI(camera, renderer, redBall)
+	 const yellowBallGUI =  new DebuggerBallGUI(camera, renderer, yellowBall)
+//	console.log(ballsArray)
 	// const axisHelper = new THREE.AxesHelper()
-	new DebuggerGUI(/* table, */ whiteBall,  redBall, material, camera, renderer)
-	// console.log(scene)
+
+//	 console.log(scene)
 	// scene.add( axisHelper);
 
 
-
 }
+
 function BallChecker(ball) {
 	let top_right_pocket = new Vector3(-140, 0, -90)
 	let top_left_pocket = new Vector3(-140, 0, 90)
@@ -145,6 +162,7 @@ function BallChecker(ball) {
 	}
 }
 function renderEvent(source){
+
 	var img = document.createElement('img');
 	img.src = source;
 	document.getElementById('container').appendChild(img);
@@ -159,10 +177,17 @@ function renderEvent(source){
 
 }
 export function animate() {
+	controls.enableDamping = true
+	controls.dampingFactor = 0.05
+	//controls.update(  )
+
 	BallChecker(whiteBall)
+	BallChecker(redBall)
+	BallChecker(yellowBall)
+
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
 	// whiteBall.Move(scene, /* table */)
-//	console.log(camera.position.x, camera.position.y, camera.position.z)
+	// console.log(camera.position.x, camera.position.y, camera.position.z)
 
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
