@@ -97,35 +97,72 @@ function BallChecker(ball) {
 		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z ){
 			console.log('Ball felt in the top right pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z ){
 			console.log('Ball felt in the top left pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z ){
 			console.log('Ball felt in the middle left pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z ){
 			console.log('Ball felt in the middle right pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z ){
 			console.log('Ball felt in the bottom left pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z ){
 			console.log('Ball felt in the bottom right pocket', )
 			ball.visible = false
+			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU")
+			ball.position.x = 0
+			ball.position.z = 0
+			ball.visible = true
 		} 
 	}
 }
+function renderEvent(source){
+	var img = document.createElement('img');
+	img.src = source;
+	document.getElementById('container').appendChild(img);
+	img.style.zIndex = "100000"
+	img.style.position = "fixed"
+	img.style.top = "50%"
+	img.style.left = "50%"
+	img.style.transform = "translate(-50%, -50%)"
+	setTimeout(()=>{
+		img.remove()
+	}, 2000)
 
+}
 export function animate() {
 	BallChecker(whiteBall)
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
 	// whiteBall.Move(scene, /* table */)
-	console.log(camera.position.x, camera.position.y, camera.position.z)
+//	console.log(camera.position.x, camera.position.y, camera.position.z)
 
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
