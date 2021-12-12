@@ -83,10 +83,17 @@ export function init(){
 
 
 }
-
+function BallChecker(ball) {
+	if(ball.visible){
+		if (ball.position.x == -140 && ball.position.z == -90 ){
+			console.log('not on the table')
+			ball.visible = false
+		} 
+	}
+}
 
 export function animate() {
-	
+	BallChecker(whiteBall)
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
 	// whiteBall.Move(scene, /* table */)
 	console.log(camera.position.x, camera.position.y, camera.position.z)
