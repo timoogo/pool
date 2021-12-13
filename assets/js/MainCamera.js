@@ -12,6 +12,7 @@ const scene = new THREE.Scene();
 
 
 let color;
+
 const whiteBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
 	color: "white"
 }))
@@ -29,14 +30,19 @@ groupBalls.name = 'Balls'
 camera.name = "Main Camera"
 const controls = new OrbitControls( camera, renderer.domElement );
 
-
+/**
+ * Renderer function for setting the size and color
+ */
 
 function Renderer() {
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setClearColor(0x333F47, 1);
+	renderer.setSize(window.innerWidth, window.innerHeight); // size
+	renderer.setClearColor(0x333F47, 1); //color
 	renderer.shadowMapSoft = true;
 }
-
+/**
+ * Function for creating all lights of the scene 
+ * 
+ */
 function Light() {
 	let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
 	backLight.position.set(0, 700, 200);
@@ -55,7 +61,15 @@ function Light() {
 	scene.add(groupLight);
 	groupLight.name = "Lighting"
 }
-
+/**
+ * Init function for loading all the assets of the scenes
+ * loader is specific for the table (const object)
+ * 
+ * setting the initial position of the balls
+ * Creating the gui for debugging balls and camera
+ * 
+ * Then, we set the light on the scene and we call the renderer. 
+ */
 export function init(){
 
 	camera.position.y = 300
@@ -99,9 +113,23 @@ export function init(){
 
 
 }
+/**
+ * Returns a random position
+ * Used in @BallChecker() (after the ball enters a hole)
+ * @param {Integer} min 
+ * @param {Integer} max 
+ * @returns 
+ */
 function randomIntFromInterval(min, max) { // min and max included 
 	return Math.floor(Math.random() * (max - min + 1) + min)
   }
+  /**
+   * Verify if the ball is insîde a pocket.
+   * If so, the function calls the  @renderEvent() function
+   * Then it will place the ball randomly on the table surface
+   * Then, finally, will make the ball reappair 
+   * @param {Object} ball 
+   */
 function BallChecker(ball) {
 	let top_right_pocket = new Vector3(-140, 0, -90)
 	let top_left_pocket = new Vector3(-140, 0, 90)
@@ -176,6 +204,12 @@ ball.visible = true
 		} 
 	}
 }
+/**
+ * Just create the video / image element, then render it over everything of the screen then place it on the center
+ * @param {*} source 
+ * @param {*} ball 
+ * @param {*} hole 
+ */
 function renderEvent(source, ball, hole){
 
 	let img = document.createElement('img');
@@ -206,6 +240,10 @@ function renderEvent(source, ball, hole){
 	}, 5000)
 
 }
+/**
+ * Animate function which call itself for "animating all objects on the scene"
+ * verify if balls are in a hole
+ */
 export function animate() {
 	controls.enableDamping = true
 	controls.dampingFactor = 0.05

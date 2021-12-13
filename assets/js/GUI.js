@@ -1,8 +1,11 @@
 import { GUI } from 'https://cdn.jsdelivr.net/npm/three@0.127/examples/jsm/libs/dat.gui.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { DEG2RAD } from 'three/src/math/MathUtils';
 
-
+/**
+ * 
+ * @param {*} degrees 
+ * @returns tne conversion of the degrees into radians
+ */
 function degrees_to_radians(degrees)
 {
   var pi = Math.PI;
@@ -11,12 +14,11 @@ function degrees_to_radians(degrees)
 
 
 /**
- * 
- * @param {*} mesh 
- * @param {object=} ball optional  
- * @param {*} material 
- * @param {*} camera 
- * @param {*} renderer 
+ * Debugger a specific ball, managing the display and position
+ * @param {*} camera the main camera
+ * @param {*} renderer the main renderer
+ * @param {*} obj the ball to debug
+ * @param {*} openFolder if we want that the datgui folder is opened 
  */
 function DebuggerBallGUI(camera, renderer, obj, openFolder = true){
   console.log(obj.name)
@@ -33,6 +35,12 @@ function DebuggerBallGUI(camera, renderer, obj, openFolder = true){
     }
 
 }
+/**
+ * debugger of the camera 
+ * @param {*} camera 
+ * @param {*} renderer 
+ * @param {*} openFolder 
+ */
 function CameraGUI(camera, renderer, openFolder = true){
   const controls = new OrbitControls( camera, renderer.domElement );
   const gui = new GUI({autoplace: true});
