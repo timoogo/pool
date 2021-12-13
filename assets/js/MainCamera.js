@@ -117,62 +117,62 @@ function BallChecker(ball) {
 		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z ){
 			console.log('Ball felt in the top right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name,  " top right pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name,  " top right pocket")
 			ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z ){
 			console.log('Ball felt in the top left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " top left pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " top left pocket")
 				ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z ){
 			console.log('Ball felt in the middle left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " middle left pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " middle left pocket")
 				ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z ){
 			console.log('Ball felt in the middle right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " middle right pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " middle right pocket")
 				ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z ){
 			console.log('Ball felt in the bottom left pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " bottom right pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " bottom right pocket")
 				ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z ){
 			console.log('Ball felt in the bottom right pocket', )
 			ball.visible = false
-			renderEvent("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhRMf_T8E4OzWFVCbgIzcTcOhtgr48Wp0OOg&usqp=CAU",ball.name, " bottomleft pocket")
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " bottomleft pocket")
 				ball.position.x = randomIntFromInterval(-120, 120)
 			ball.position.z =  randomIntFromInterval(-90, 90)
 			setTimeout(()=>{
 ball.visible = true
-			}, 2500)
+			}, 5500)
 		} 
 	}
 }
@@ -203,7 +203,7 @@ function renderEvent(source, ball, hole){
 	setTimeout(()=>{
 		img.remove()
 		txt.remove()
-	}, 2000)
+	}, 5000)
 
 }
 export function animate() {
@@ -231,4 +231,3 @@ export function animate() {
 
 
 }
-
