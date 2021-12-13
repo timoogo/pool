@@ -86,6 +86,7 @@ export function init(){
 	  whiteBall.position.y = object.position.y + 11
 	  redBall.position.y = object.position.y + 11
 	  yellowBall.position.y = object.position.y + 11
+	  whiteBall.position.x = -140
 	  redBall.position.x = 140
 	  const cameraGUI = new CameraGUI(camera, renderer)
 
