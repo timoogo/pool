@@ -20,7 +20,7 @@ function degrees_to_radians(degrees)
  * @param {*} obj the ball to debug
  * @param {*} openFolder if we want that the datgui folder is opened 
  */
-function DebuggerBallGUI(camera, renderer, obj, openFolder = true){
+function DebuggerBallGUI(camera, renderer, obj, openFolder = false){
   console.log(obj.name)
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: true});
@@ -41,7 +41,7 @@ function DebuggerBallGUI(camera, renderer, obj, openFolder = true){
  * @param {*} renderer 
  * @param {*} openFolder 
  */
-function CameraGUI(camera, renderer, openFolder = true){
+function CameraGUI(camera, renderer, openFolder = false){
   const controls = new OrbitControls( camera, renderer.domElement );
   const gui = new GUI({autoplace: true});
   
