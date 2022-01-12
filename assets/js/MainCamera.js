@@ -1,34 +1,43 @@
-import {DebuggerBallGUI, CameraGUI} from './GUI.js'	
+import {
+	DebuggerBallGUI,
+	DebuggerTableGUI,
+	DebuggerCueGUI,
+	CameraGUI
+} from './GUI.js'
 import * as THREE from 'three'
-import {Ball} from "../../models/Ball.js"
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import {
+	Ball
+} from "../../models/Ball.js"
+import {
+	OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls.js';
 
-// import {Table} from "./models/Table.js"
-import { AxesHelper, Vector3 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import {
+	AxesHelper,
+	Vector3
+} from 'three';
+import {
+	GLTFLoader
+} from 'three/examples/jsm/loaders/GLTFLoader'
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 
-
-
-let color;
-
-const whiteBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
+const whiteBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 	color: "white"
 }))
-const redBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
+const redBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 	color: "red"
 }))
-const yellowBall = new Ball(new THREE.SphereGeometry(6,30,30), new THREE.MeshLambertMaterial({
+const yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 	color: "yellow"
 }))
-const groupBalls = new THREE.Group();
-groupBalls.add(whiteBall, redBall, yellowBall)
-groupBalls.name = 'Balls'
-// const table = new Table(new THREE.BoxGeometry(150, 300 ,3), new THREE.MeshLambertMaterial({transparent: true }))
- const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight , 0.1, 1000 );
+const balls = new THREE.Group();
+balls.add(whiteBall, redBall, yellowBall)
+balls.name = 'balls'
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
 camera.name = "Main Camera"
-const controls = new OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls(camera, renderer.domElement);
 
 /**
  * Renderer function for setting the size and color
@@ -70,46 +79,40 @@ function Light() {
  * 
  * Then, we set the light on the scene and we call the renderer. 
  */
-export function init(){
+export function init() {
 
-	camera.position.y = 300
-	const loader = new GLTFLoader();
-	loader.crossOrigin = true;
-	loader.load( '../../models/obj/PoolMatte.glb', function ( data ) {
-		const object = data.scene;
-		object.position.set(0, 0, 0);
-		 object.scale.set(1000, 1000, 1000)
-		//	console.log(object.scale)
-			scene.add( object );
-			
-	  //, onProgress, onError );
-	  whiteBall.position.y = object.position.y + 11
-	  redBall.position.y = object.position.y + 11
-	  yellowBall.position.y = object.position.y + 11
-	  whiteBall.position.x = -140
-	  redBall.position.x = 140
-	  const cameraGUI = new CameraGUI(camera, renderer)
+	camera.position.set(0, 10, 0) 
 
-	});
 	Light();
 	Renderer();
-	document.body.appendChild( renderer.domElement );
+	document.body.appendChild(renderer.domElement);
 
 
-    const material = new THREE.MeshLambertMaterial({transparent: true });
+	const material = new THREE.MeshLambertMaterial({
+		transparent: true
+	});
 	//whiteBall.position.set(0, 0, 1)
+	const table = LoadModel("DVIC_table")
+	const cue = LoadModel('DVIC_cue')
+
 	whiteBall.name = 'White ball'
 	yellowBall.name = 'Yellow ball'
 	redBall.name = "Red ball"
-	scene.add(  groupBalls  );
-	
-	const whiteBallGUI =  new DebuggerBallGUI(camera, renderer, whiteBall)
-	 const redBallGUI =  new DebuggerBallGUI(camera, renderer, redBall)
-	 const yellowBallGUI =  new DebuggerBallGUI(camera, renderer, yellowBall)
-//	console.log(ballsArray)
+	 whiteBall.position.y = -13
+	redBall.position.y = -13
+	yellowBall.position.y = -13
+	whiteBall.position.x = -140
+	redBall.position.x = 140
+	scene.add(balls);
+	const cameraGUI = new CameraGUI(camera, renderer, true)
+	const whiteBallGUI = new DebuggerBallGUI(camera, renderer, whiteBall)
+	const redBallGUI = new DebuggerBallGUI(camera, renderer, redBall)
+	const yellowBallGUI = new DebuggerBallGUI(camera, renderer, yellowBall)
+
+	//	console.log(ballsArray)
 	// const axisHelper = new THREE.AxesHelper()
 
-//	 console.log(scene)
+	//	 console.log(scene)
 	// scene.add( axisHelper);
 
 
@@ -121,88 +124,88 @@ export function init(){
  * @param {Integer} max 
  * @returns 
  */
-function randomIntFromInterval(min, max) { // min and max included 
-	return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-  /**
-   * Verify if the ball is insîde a pocket.
-   * If so, the function calls the  @renderEvent() function
-   * Then it will place the ball randomly on the table surface
-   * Then, finally, will make the ball reappair 
-   * @param {Object} ball 
-   */
+// function randomIntFromInterval(min, max) { // min and max included 
+// 	return Math.floor(Math.random() * (max - min + 1) + min)
+//   }
+/**
+ * Verify if the ball is insîde a pocket.
+ * If so, the function calls the  @renderEvent() function
+ * Then it will place the ball randomly on the table surface
+ * Then, finally, will make the ball reappair 
+ * @param {Object} ball 
+ */
 function BallChecker(ball) {
-	let top_right_pocket = new Vector3(-140, 0, -90)
-	let top_left_pocket = new Vector3(-140, 0, 90)
+	let top_right_pocket = new Vector3(-195, 0, -90)
+	let top_left_pocket = new Vector3(-195, 0, 90)
 	let middle_left_pocket = new Vector3(0, 0, 90)
 	let middle_right_pocket = new Vector3(0, 0, -90)
-	let bottom_right_pocket = new Vector3(140, 0, -90)
-	let bottom_left_pocket = new Vector3(140, 0, 90)
+	let bottom_right_pocket = new Vector3(195, 0, -90)
+	let bottom_left_pocket = new Vector3(195, 0, 90)
 
-	
+
 	// if(ball.position.x !=140 )
 
-	if(ball.visible){
-		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z ){
+	if (ball.visible) {
+		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z) {
 			console.log('Ball felt in the top right pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name,  " top right pocket")
-			ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top right pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
-		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z ){
+		}
+		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z) {
 			console.log('Ball felt in the top left pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " top left pocket")
-				ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top left pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
-		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z ){
+		}
+		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z) {
 			console.log('Ball felt in the middle left pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " middle left pocket")
-				ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle left pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
-		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z ){
+		}
+		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z) {
 			console.log('Ball felt in the middle right pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " middle right pocket")
-				ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle right pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
-		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z ){
+		}
+		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z) {
 			console.log('Ball felt in the bottom left pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " bottom right pocket")
-				ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottom right pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
-		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z ){
+		}
+		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z) {
 			console.log('Ball felt in the bottom right pocket', )
 			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif",ball.name, " bottomleft pocket")
-				ball.position.x = randomIntFromInterval(-120, 120)
-			ball.position.z =  randomIntFromInterval(-90, 90)
-			setTimeout(()=>{
-ball.visible = true
+			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottomleft pocket")
+			ball.position.x = 0
+			ball.position.z = 20
+			setTimeout(() => {
+				ball.visible = true
 			}, 5500)
-		} 
+		}
 	}
 }
 /**
@@ -211,12 +214,12 @@ ball.visible = true
  * @param {*} ball 
  * @param {*} hole 
  */
-function renderEvent(source, ball, hole){
+function renderEvent(source, ball, hole) {
 
 	let img = document.createElement('img');
 	let txt = document.createElement('p')
 	img.src = source;
-	txt.innerHTML = ball + " in pocket" + hole 
+	txt.innerHTML = ball + " in pocket" + hole
 	document.getElementById('container').appendChild(img);
 	document.getElementById('container').appendChild(txt);
 	img.style.zIndex = "100000"
@@ -235,7 +238,7 @@ function renderEvent(source, ball, hole){
 	txt.style.marginTop = "3rem"
 
 
-	setTimeout(()=>{
+	setTimeout(() => {
 		img.remove()
 		txt.remove()
 	}, 5000)
@@ -246,6 +249,7 @@ function renderEvent(source, ball, hole){
  * verify if balls are in a hole
  */
 export function animate() {
+
 	controls.enableDamping = true
 	controls.dampingFactor = 0.05
 	//controls.update(  )
@@ -258,15 +262,41 @@ export function animate() {
 	// whiteBall.Move(scene, /* table */)
 	// console.log(camera.position.x, camera.position.y, camera.position.z)
 
-	requestAnimationFrame( animate );
-	renderer.render( scene, camera );
-	window.addEventListener('resize', () =>{
-		renderer.setSize( window.innerWidth, window.innerHeight );
-    	
+	requestAnimationFrame(animate);
+	renderer.render(scene, camera);
+	window.addEventListener('resize', () => {
+		renderer.setSize(window.innerWidth, window.innerHeight);
 		camera.aspect = (window.innerWidth / window.innerHeight)
 		camera.updateProjectionMatrix()
+	}
+)
+
+
+}
+
+
+function LoadModel(object){
+	const Loader = new GLTFLoader();
+	Loader.crossOrigin = true;
+	Loader.load("../../models/obj/"+object+".glb", function (data) {
+		const object = data.scene;
+		object.position.y = 87
 		
-	})
+		if(object.getObjectByName('cue')){
+			const CueGUI = new DebuggerCueGUI(camera, renderer, object, true)
+			object.position.set(0,-300,-142)
 
+		
+		} else {
+			const TableGUI = new DebuggerTableGUI(camera, renderer, object, true)
+			object.position.set(0,-187,0)
+			
+		}
+		console.log(object)
+		object.scale.set(1, 1, 1)
+		scene.add(object);
+	
+		//, onProgress, onError );
 
+	});
 }

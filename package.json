@@ -10,7 +10,9 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
+    "ngrok": "^4.2.2",
     "source-map": "^0.7.3",
-    "three": "^0.134.0"
+    "three": "^0.134.0",
+    "three.orientation": "^1.1.1"
   }
 }

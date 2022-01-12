@@ -21,19 +21,52 @@ function degrees_to_radians(degrees)
  * @param {*} openFolder if we want that the datgui folder is opened 
  */
 function DebuggerBallGUI(camera, renderer, obj, openFolder = false){
-  console.log(obj.name)
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: true});
     gui.domElement.id = obj.name.replace(/\s/g, '')
     gui.name = obj.name
     const ballFolder = gui.addFolder(obj.name + ' options')
     ballFolder.add(obj, 'visible').name("Display")
-    ballFolder.add(obj.position, 'x', -140, 140).listen();
+    ballFolder.add(obj.position, 'x', -195, 195).listen();
+    ballFolder.add(obj.position, 'y', -20, 10).step(1).listen();
     ballFolder.add(obj.position, 'z', -90, 90).listen();
     if(openFolder){
       ballFolder.open()
     }
 
+}
+function DebuggerTableGUI(camera, renderer, obj, openFolder = false){
+    const controls = new OrbitControls( camera, renderer.domElement );
+    const gui = new GUI({autoplace: true});
+    gui.domElement.id = obj.name.replace(/\s/g, '')
+    gui.name = obj.name
+    const tableFolder = gui.addFolder('table options')
+    tableFolder.add(obj, 'visible').name("Display")
+    const positionFolder = gui.addFolder('Position')
+    positionFolder.add(obj.position, 'x', -140, 140).listen();
+    positionFolder.add(obj.position, 'y', -500, 500).listen();
+    positionFolder.add(obj.position, 'z', -90, 90).listen();
+    if(openFolder){
+      tableFolder.open()
+    }
+
+}
+function DebuggerCueGUI(camera, renderer, obj, openFolder){
+ const controls = new OrbitControls(camera, renderer.domElement)
+ const gui = new GUI({autoplace: true});
+ console.log(obj.position)
+ const cueFolder = gui.addFolder('cue options')
+    cueFolder.add(obj, 'visible').name("Display")
+    cueFolder.add(obj.position, 'x', -500, 500).listen();
+    cueFolder.add(obj.position, 'y', -500, 500).listen();
+    cueFolder.add(obj.position, 'z', -500, 500).listen();
+    const rotationFolder = gui.addFolder('Rotation')
+    rotationFolder.add(obj.rotation, 'x', -90 * Math.PI / 180, 90 * Math.PI / 180).listen();
+    rotationFolder.add(obj.rotation, 'y', -90 * Math.PI / 180, 90 * Math.PI / 180).listen();
+    rotationFolder.add(obj.rotation, 'z', -90 * Math.PI / 180, 90 * Math.PI / 180).listen();
+    if(openFolder){
+      cueFolder.open()
+    }
 }
 /**
  * debugger of the camera 
@@ -48,7 +81,14 @@ function CameraGUI(camera, renderer, openFolder = false){
   gui.domElement.id = camera.name.replace(/\s/g, '')
   gui.name = camera.name + ' options'
   const cameraFolder = gui.addFolder('camera options')
-
+  const positionFolder = cameraFolder.addFolder('position')
+  positionFolder.add(camera.position, 'x', -140, 140).listen();
+  positionFolder.add(camera.position, 'y', -500, 500).listen();
+  positionFolder.add(camera.position, 'z', -90, 90).listen();
+  const rotationFolder = cameraFolder.addFolder('Rotation')
+  rotationFolder.add(camera.rotation, 'x', -90, 90).step(1).listen();
+  rotationFolder.add(camera.rotation, 'y', 0, 90).step(1).listen();
+  rotationFolder.add(camera.rotation, 'z', -90, 90).step(1).listen();
   
   let topView = { topView:function(){
   //  controls.reset()
@@ -72,5 +112,5 @@ function CameraGUI(camera, renderer, openFolder = false){
 }
 
 
-export {DebuggerBallGUI, CameraGUI}
+export {DebuggerBallGUI, DebuggerTableGUI,DebuggerCueGUI, CameraGUI}
  
