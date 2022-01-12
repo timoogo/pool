@@ -38,6 +38,12 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 camera.name = "Main Camera"
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.minDistance = 200
+controls.maxDistance = 400
+controls.touches = {
+	ONE: THREE.TOUCH.DOLLY_ROTATE,
+	TWO: THREE.TOUCH.DOLLY_PAN
+}
 
 /**
  * Renderer function for setting the size and color
@@ -98,11 +104,11 @@ export function init() {
 	whiteBall.name = 'White ball'
 	yellowBall.name = 'Yellow ball'
 	redBall.name = "Red ball"
-	 whiteBall.position.y = -13
-	redBall.position.y = -13
-	yellowBall.position.y = -13
-	whiteBall.position.x = -140
-	redBall.position.x = 140
+	redBall.position.y = -11
+	yellowBall.position.y = -11
+	//whiteBall.position.y = -1 
+	whiteBall.position.set(15,-11,0) 
+		redBall.position.x = 140
 	scene.add(balls);
 	const cameraGUI = new CameraGUI(camera, renderer, true)
 	const whiteBallGUI = new DebuggerBallGUI(camera, renderer, whiteBall)
