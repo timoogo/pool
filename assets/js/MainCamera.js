@@ -22,9 +22,8 @@ import {
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 
-const whiteBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
-	color: "white"
-}))
+
+
 const redBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 	color: "red"
 }))
@@ -32,7 +31,7 @@ const yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshL
 	color: "yellow"
 }))
 const balls = new THREE.Group();
-balls.add(whiteBall, redBall, yellowBall)
+balls.add(redBall, yellowBall)
 balls.name = 'balls'
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -85,6 +84,9 @@ function Light() {
  * 
  * Then, we set the light on the scene and we call the renderer. 
  */
+
+
+
 export function init() {
 
 	camera.position.set(0, 10, 0) 
@@ -97,21 +99,16 @@ export function init() {
 	const material = new THREE.MeshLambertMaterial({
 		transparent: true
 	});
-	//whiteBall.position.set(0, 0, 1)
 	const table = LoadModel("DVIC_table")
 	const cue = LoadModel('DVIC_cue')
 
-	whiteBall.name = 'White ball'
 	yellowBall.name = 'Yellow ball'
 	redBall.name = "Red ball"
 	redBall.position.y = -11
 	yellowBall.position.y = -11
-	//whiteBall.position.y = -1 
-	whiteBall.position.set(15,-11,0) 
 		redBall.position.x = 140
 	scene.add(balls);
 	const cameraGUI = new CameraGUI(camera, renderer, true)
-	const whiteBallGUI = new DebuggerBallGUI(camera, renderer, whiteBall)
 	const redBallGUI = new DebuggerBallGUI(camera, renderer, redBall)
 	const yellowBallGUI = new DebuggerBallGUI(camera, renderer, yellowBall)
 
@@ -250,25 +247,47 @@ function renderEvent(source, ball, hole) {
 	}, 5000)
 
 }
+function randomIntFromInterval(min, max) { // min and max included 
+	return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+const list = [[100,100], [12,40],[184,85]];
+
+function updateFrame(list){
+	const balls = [];
+	for (let ball of list) {
+		let yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
+			color: "yellow"
+		}))
+		yellowBall.position.x = randomIntFromInterval(-195, 195)
+		yellowBall.position.y = randomIntFromInterval(-90, 90)
+		yellowBall.position.z = randomIntFromInterval(-195, 195)
+		BallChecker(yellowBall)
+		yellowBall.position.x = ball[0];
+		yellowBall.position.z = ball[1];
+		yellowBall.position.y = -11;
+		balls.push(yellowBall)
+		scene.add(yellowBall)
+		console.log(ball)
+	}
+}
 /**
  * Animate function which call itself for "animating all objects on the scene"
  * verify if balls are in a hole
  */
 export function animate() {
-
+	let i = 0
 	controls.enableDamping = true
 	controls.dampingFactor = 0.05
 	//controls.update(  )
 
-	BallChecker(whiteBall)
-	BallChecker(redBall)
-	BallChecker(yellowBall)
+	// BallChecker(redBall)
+	// BallChecker(yellowBall)
 
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
-	// whiteBall.Move(scene, /* table */)
 	// console.log(camera.position.x, camera.position.y, camera.position.z)
 
-	requestAnimationFrame(animate);
+	requestAnimationFrame(animate, 	updateFrame(list)
+	);
 	renderer.render(scene, camera);
 	window.addEventListener('resize', () => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -284,7 +303,8 @@ export function animate() {
 function LoadModel(object){
 	const Loader = new GLTFLoader();
 	Loader.crossOrigin = true;
-	Loader.load("../../models/obj/"+object+".glb", function (data) {
+	 Loader.load("../../models/obj/"+object+".glb", function (data) {
+	// Loader.load("realtimepool/models/obj/"+object+".glb", function (data) {
 		const object = data.scene;
 		object.position.y = 87
 		
