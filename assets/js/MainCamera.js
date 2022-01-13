@@ -3,7 +3,8 @@ import {
 	DebuggerTableGUI,
 	DebuggerCueGUI,
 	CameraGUI,
-	DebuggerMultiGUI
+	DebuggerMultiGUI,
+	DebuggerBallGUI
 	
 } from './GUI.js'
 import * as THREE from 'three'
@@ -60,6 +61,7 @@ controls.touches = {
 
 
 export function init() {
+	new DebuggerBallGUI(camera, renderer, redBall, true)
 	  document.body.appendChild(stats.dom)
 
 	const axisHelper = new THREE.AxesHelper(500)
@@ -321,18 +323,18 @@ updateBalls(listOfPosition, balls)
 
 
 		
-		let video = document.createElement('video');
+		let img = document.createElement('img');
 		let txt = document.createElement('p')
-		video.src = source;
-		video.autoplay = true
+		img.src = source;
+		img.autoplay = true
 		txt.innerHTML = ball + " in pocket" + hole
-		document.getElementById('container').appendChild(video);
+		document.getElementById('container').appendChild(img);
 		document.getElementById('container').appendChild(txt);
-		video.style.zIndex = "100000"
-		video.style.position = "fixed"
-		video.style.top = "50%"
-		video.style.left = "50%"
-		video.style.transform = "translate(-50%, -50%)"
+		img.style.zIndex = "100000"
+		img.style.position = "fixed"
+		img.style.top = "50%"
+		img.style.left = "50%"
+		img.style.transform = "translate(-50%, -50%)"
 		//
 		txt.style.zIndex = "100000"
 		txt.style.position = "fixed"
@@ -402,7 +404,7 @@ function initFrame(list) {
 			color: "yellow"
 		}))
 		yellowBall.position.set(ball[0], -11, ball[1])
-		yellowBall.name = `Ballname:  ${yellowBall.id} [${i}]`;
+		yellowBall.name = `Ballname:  ${yellowBall.id} [{i}]`;
 		listOfBalls.push(yellowBall)
 		scene.add(yellowBall)
 		debugFolders.push({
