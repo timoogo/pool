@@ -1,6 +1,5 @@
 import { GUI } from 'https://cdn.jsdelivr.net/npm/three@0.127/examples/jsm/libs/dat.gui.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
 /**
  * 
  * @param {*} degrees 
@@ -14,6 +13,7 @@ function degrees_to_radians(degrees)
 
 
 /**
+ 
  * Debugger a specific ball, managing the display and position
  * @param {*} camera the main camera
  * @param {*} renderer the main renderer
@@ -110,7 +110,6 @@ function CameraGUI(camera, renderer, openFolder = false){
 
   }
 }
-
 
 export {DebuggerBallGUI, DebuggerTableGUI,DebuggerCueGUI, CameraGUI}
  

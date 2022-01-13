@@ -2,7 +2,8 @@ import {
 	DebuggerBallGUI,
 	DebuggerTableGUI,
 	DebuggerCueGUI,
-	CameraGUI
+	CameraGUI,
+	
 } from './GUI.js'
 import * as THREE from 'three'
 import {
@@ -18,10 +19,14 @@ import {
 } from 'three';
 import {
 	GLTFLoader
-} from 'three/examples/jsm/loaders/GLTFLoader'
+} from 'three/examples/jsm/loaders/GLTFLoader';
+
+import Stats from 'three/examples/jsm/libs/stats.module'
+
+
+
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
-
 
 
 const redBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
@@ -41,40 +46,26 @@ controls.minDistance = 200
 controls.maxDistance = 400
 controls.touches = {
 	ONE: THREE.TOUCH.DOLLY_ROTATE,
-	TWO: THREE.TOUCH.DOLLY_PAN
-}
+	TWO: THREE.TOUCH.DOLLY_PAN,
 
-/**
- * Renderer function for setting the size and color
- */
+}
+  const stats = new Stats()
 
-function Renderer() {
-	renderer.setSize(window.innerWidth, window.innerHeight); // size
-	renderer.setClearColor(0x333F47, 1); //color
-	renderer.shadowMapSoft = true;
-}
-/**
- * Function for creating all lights of the scene 
- * 
- */
-function Light() {
-	let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
-	backLight.position.set(0, 700, 200);
-	backLight.name = 'Back light';
-	let key_light = new THREE.DirectionalLight('white', 0.0);
-	key_light.position.set(-6, -3, 0);
-	key_light.name = 'Key light';
-	let fill_light = new THREE.DirectionalLight('white', 0.0);
-	fill_light.position.set(9, 9, 6);
-	fill_light.name = 'Fill light';
-	let spotLight = new THREE.SpotLight(0xffffff);
-	spotLight.position.set(3, 700, 3);
-	spotLight.castShadow = true;
-	const groupLight = new THREE.Group();
-	groupLight.add(spotLight, backLight, key_light, fill_light)
-	scene.add(groupLight);
-	groupLight.name = "Lighting"
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * Init function for loading all the assets of the scenes
  * loader is specific for the table (const object)
@@ -88,8 +79,12 @@ function Light() {
 
 
 export function init() {
+	  document.body.appendChild(stats.dom)
 
-	camera.position.set(0, 10, 0) 
+	// const axisHelper = new THREE.AxesHelper(500)
+
+	// scene.add(axisHelper)
+	camera.position.set(0, 300, 0) 
 
 	Light();
 	Renderer();
@@ -113,168 +108,22 @@ export function init() {
 	const yellowBallGUI = new DebuggerBallGUI(camera, renderer, yellowBall)
 
 	//	console.log(ballsArray)
-	// const axisHelper = new THREE.AxesHelper()
 
 	//	 console.log(scene)
 	// scene.add( axisHelper);
 
 
 }
-/**
- * Returns a random position
- * Used in @BallChecker() (after the ball enters a hole)
- * @param {Integer} min 
- * @param {Integer} max 
- * @returns 
- */
-// function randomIntFromInterval(min, max) { // min and max included 
-// 	return Math.floor(Math.random() * (max - min + 1) + min)
-//   }
-/**
- * Verify if the ball is insîde a pocket.
- * If so, the function calls the  @renderEvent() function
- * Then it will place the ball randomly on the table surface
- * Then, finally, will make the ball reappair 
- * @param {Object} ball 
- */
-function BallChecker(ball) {
-	let top_right_pocket = new Vector3(-195, 0, -90)
-	let top_left_pocket = new Vector3(-195, 0, 90)
-	let middle_left_pocket = new Vector3(0, 0, 90)
-	let middle_right_pocket = new Vector3(0, 0, -90)
-	let bottom_right_pocket = new Vector3(195, 0, -90)
-	let bottom_left_pocket = new Vector3(195, 0, 90)
 
 
-	// if(ball.position.x !=140 )
-
-	if (ball.visible) {
-		if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z) {
-			console.log('Ball felt in the top right pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top right pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-		if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z) {
-			console.log('Ball felt in the top left pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top left pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-		if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z) {
-			console.log('Ball felt in the middle left pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle left pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-		if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z) {
-			console.log('Ball felt in the middle right pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle right pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-		if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z) {
-			console.log('Ball felt in the bottom left pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottom right pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-		if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z) {
-			console.log('Ball felt in the bottom right pocket', )
-			ball.visible = false
-			renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottomleft pocket")
-			ball.position.x = 0
-			ball.position.z = 20
-			setTimeout(() => {
-				ball.visible = true
-			}, 5500)
-		}
-	}
-}
-/**
- * Just create the video / image element, then render it over everything of the screen then place it on the center
- * @param {*} source 
- * @param {*} ball 
- * @param {*} hole 
- */
-function renderEvent(source, ball, hole) {
-
-	let img = document.createElement('img');
-	let txt = document.createElement('p')
-	img.src = source;
-	txt.innerHTML = ball + " in pocket" + hole
-	document.getElementById('container').appendChild(img);
-	document.getElementById('container').appendChild(txt);
-	img.style.zIndex = "100000"
-	img.style.position = "fixed"
-	img.style.top = "50%"
-	img.style.left = "50%"
-	img.style.transform = "translate(-50%, -50%)"
-	//
-	txt.style.zIndex = "100000"
-	txt.style.position = "fixed"
-	txt.style.top = "75%"
-	txt.style.left = "50%"
-	txt.style.transform = "translate(-50%, -50%)"
-	txt.style.color = "white"
-	txt.style.fontSize = "2rem"
-	txt.style.marginTop = "3rem"
 
 
-	setTimeout(() => {
-		img.remove()
-		txt.remove()
-	}, 5000)
-
-}
-function randomIntFromInterval(min, max) { // min and max included 
-	return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-const list = [[100,100], [12,40],[184,85]];
-
-function updateFrame(list){
-	const balls = [];
-	for (let ball of list) {
-		let yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
-			color: "yellow"
-		}))
-		yellowBall.position.x = randomIntFromInterval(-195, 195)
-		yellowBall.position.y = randomIntFromInterval(-90, 90)
-		yellowBall.position.z = randomIntFromInterval(-195, 195)
-		BallChecker(yellowBall)
-		yellowBall.position.x = ball[0];
-		yellowBall.position.z = ball[1];
-		yellowBall.position.y = -11;
-		balls.push(yellowBall)
-		scene.add(yellowBall)
-		console.log(ball)
-	}
-}
 /**
  * Animate function which call itself for "animating all objects on the scene"
  * verify if balls are in a hole
  */
 export function animate() {
+	stats.update()
 	let i = 0
 	controls.enableDamping = true
 	controls.dampingFactor = 0.05
@@ -286,8 +135,8 @@ export function animate() {
 	// redBall.MotionDesign(scene, /*table,*/  redBall)
 	// console.log(camera.position.x, camera.position.y, camera.position.z)
 
-	requestAnimationFrame(animate, 	updateFrame(list)
-	);
+	requestAnimationFrame(animate);
+	updateFrame(list)
 	renderer.render(scene, camera);
 	window.addEventListener('resize', () => {
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -297,6 +146,194 @@ export function animate() {
 )
 
 
+}
+
+
+
+	///  
+
+	/**
+	* Renderer function for setting the size and color
+	*/
+
+	function Renderer() {
+		renderer.setSize(window.innerWidth, window.innerHeight); // size
+		renderer.setClearColor(0x333F47, 1); //color
+		renderer.shadowMapSoft = true;
+	}
+	/**
+	* Function for creating all lights of the scene 
+	* 
+	*/
+	function Light() {
+		let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
+		backLight.position.set(0, 700, 200);
+		backLight.name = 'Back light';
+		let key_light = new THREE.DirectionalLight('white', 0.0);
+		key_light.position.set(-6, -3, 0);
+		key_light.name = 'Key light';
+		let fill_light = new THREE.DirectionalLight('white', 0.0);
+		fill_light.position.set(9, 9, 6);
+		fill_light.name = 'Fill light';
+		let spotLight = new THREE.SpotLight(0xffffff);
+		spotLight.position.set(3, 700, 3);
+		spotLight.castShadow = true;
+		const groupLight = new THREE.Group();
+		groupLight.add(spotLight, backLight, key_light, fill_light)
+		scene.add(groupLight);
+		groupLight.name = "Lighting"
+	}
+
+	/**
+	* Returns a random position
+	* Used in @BallChecker() (after the ball enters a hole)
+	* @param {Integer} min 
+	* @param {Integer} max 
+	* @returns 
+	*/
+	// function randomIntFromInterval(min, max) { // min and max included 
+	// 	return Math.floor(Math.random() * (max - min + 1) + min)
+	//   }
+	/**
+	* Verify if the ball is insîde a pocket.
+	* If so, the function calls the  @renderEvent() function
+	* Then it will place the ball randomly on the table surface
+	* Then, finally, will make the ball reappair 
+	* @param {Object} ball 
+	*/
+	function BallChecker(ball) {
+		let top_right_pocket = new Vector3(-195, 0, -90)
+		let top_left_pocket = new Vector3(-195, 0, 90)
+		let middle_left_pocket = new Vector3(0, 0, 90)
+		let middle_right_pocket = new Vector3(0, 0, -90)
+		let bottom_right_pocket = new Vector3(195, 0, -90)
+		let bottom_left_pocket = new Vector3(195, 0, 90)
+
+
+		// if(ball.position.x !=140 )
+
+		if (ball.visible) {
+			if (ball.position.x == top_right_pocket.x && ball.position.z == top_right_pocket.z) {
+				console.log('Ball felt in the top right pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top right pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+			if (ball.position.x == top_left_pocket.x && ball.position.z == top_left_pocket.z) {
+				console.log('Ball felt in the top left pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " top left pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+			if (ball.position.x == middle_left_pocket.x && ball.position.z == middle_left_pocket.z) {
+				console.log('Ball felt in the middle left pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle left pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+			if (ball.position.x == middle_right_pocket.x && ball.position.z == middle_right_pocket.z) {
+				console.log('Ball felt in the middle right pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " middle right pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+			if (ball.position.x == bottom_left_pocket.x && ball.position.z == bottom_left_pocket.z) {
+				console.log('Ball felt in the bottom left pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottom right pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+			if (ball.position.x == bottom_right_pocket.x && ball.position.z == bottom_right_pocket.z) {
+				console.log('Ball felt in the bottom right pocket', )
+				ball.visible = false
+				renderEvent("https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif", ball.name, " bottomleft pocket")
+				ball.position.x = 0
+				ball.position.z = 20
+				setTimeout(() => {
+					ball.visible = true
+				}, 5500)
+			}
+		}
+	}
+	/**
+	* Just create the video / image element, then render it over everything of the screen then place it on the center
+	* @param {*} source 
+	* @param {*} ball 
+	* @param {*} hole 
+	*/
+	function renderEvent(source, ball, hole) {
+
+		let img = document.createElement('img');
+		let txt = document.createElement('p')
+		img.src = source;
+		txt.innerHTML = ball + " in pocket" + hole
+		document.getElementById('container').appendChild(img);
+		document.getElementById('container').appendChild(txt);
+		img.style.zIndex = "100000"
+		img.style.position = "fixed"
+		img.style.top = "50%"
+		img.style.left = "50%"
+		img.style.transform = "translate(-50%, -50%)"
+		//
+		txt.style.zIndex = "100000"
+		txt.style.position = "fixed"
+		txt.style.top = "75%"
+		txt.style.left = "50%"
+		txt.style.transform = "translate(-50%, -50%)"
+		txt.style.color = "white"
+		txt.style.fontSize = "2rem"
+		txt.style.marginTop = "3rem"
+
+
+		setTimeout(() => {
+			img.remove()
+			txt.remove()
+		}, 5000)
+
+	}
+	function randomIntFromInterval(min, max) { // min and max included 
+		return Math.floor(Math.random() * (max - min + 1) + min)
+	}
+///
+const list = [[100,100], [12,40],[184,85]];
+
+function updateFrame(list){
+	const balls = [];
+	for (let ball of list) {
+		let yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
+			color: "yellow"
+		}))
+		yellowBall.position.x = randomIntFromInterval(-190, 190)
+		yellowBall.position.y = -11
+		yellowBall.position.z = randomIntFromInterval(-190, 190)
+		BallChecker(yellowBall)
+		yellowBall.position.x = ball[0];
+		yellowBall.position.z = ball[1];
+		yellowBall.position.y = -11;
+		balls.push(yellowBall)
+		scene.add(yellowBall)
+		console.log(balls)
+	}
 }
 
 
