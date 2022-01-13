@@ -14,27 +14,19 @@ function degrees_to_radians(degrees)
 
 /**
  
- * Debugger a specific ball, managing the display and position
- * @param {*} camera the main camera
- * @param {*} renderer the main renderer
- * @param {*} obj the ball to debug
- * @param {*} openFolder if we want that the datgui folder is opened 
- */
-function DebuggerBallGUI(camera, renderer, obj, openFolder = false){
-    const controls = new OrbitControls( camera, renderer.domElement );
-    const gui = new GUI({autoplace: true});
-    gui.domElement.id = obj.name.replace(/\s/g, '')
-    gui.name = obj.name
-    const ballFolder = gui.addFolder(obj.name + ' options')
-    ballFolder.add(obj, 'visible').name("Display")
-    ballFolder.add(obj.position, 'x', -195, 195).listen();
-    ballFolder.add(obj.position, 'y', -20, 10).step(1).listen();
-    ballFolder.add(obj.position, 'z', -90, 90).listen();
-    if(openFolder){
-      ballFolder.open()
-    }
+**/
 
+function DebuggerMultiGUI(name, folders) {
+  const gui = new GUI({autoplace: true})
+  gui.name = name
+  gui.domElement.id = name.replace(/\s/g, '')
+  
+  folders.forEach(folder => {
+    const guiFolder = gui.addFolder(folder.name)
+    folder.options.forEach(option => guiFolder.add(...option).listen())
+  })
 }
+
 function DebuggerTableGUI(camera, renderer, obj, openFolder = false){
     const controls = new OrbitControls( camera, renderer.domElement );
     const gui = new GUI({autoplace: true});
@@ -111,5 +103,5 @@ function CameraGUI(camera, renderer, openFolder = false){
   }
 }
 
-export {DebuggerBallGUI, DebuggerTableGUI,DebuggerCueGUI, CameraGUI}
+export { DebuggerTableGUI,DebuggerCueGUI, CameraGUI, DebuggerMultiGUI}
  
