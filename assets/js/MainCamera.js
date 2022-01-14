@@ -380,9 +380,8 @@ function updateBalls(list) {
 		let ball = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 			color: "yellow"
 		}))
-		const [xPosition, yPosition] = list[index]
-		ball.position.x = xPosition
-		ball.position.z = yPosition
+		ball.position.x = element[0]
+		ball.position.z = element[1]
 		listOfBalls.push(ball)
 		//	BallChecker(element)
 
