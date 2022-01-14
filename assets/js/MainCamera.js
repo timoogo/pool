@@ -25,7 +25,10 @@ import {
 
 import Stats from 'three/examples/jsm/libs/stats.module'
 
-
+const TABLE_SIZE = {
+	L: 430,
+	H: 216
+}
 
 const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
@@ -58,7 +61,22 @@ controls.touches = {
  * Creating the gui for debugging balls and camera
  * Then, we set the light on the scene and we call the renderer. 
  */
+ const socket = io.connect("https://vps.thomasjuldo.com", {
+    path: "/realtimepool/socket.io/",
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+    agent: false,
+    upgrade: false,
+    rejectUnauthorized: false,
+    transports: ["websocket"],
+});
 
+socket.on("new_data", (data) => {
+  //  console.log(data);
+  listOfPosition = ConvertListPosition(data)
+});
 
 export function init() {
 	new DebuggerBallGUI(camera, renderer, redBall, true)
@@ -457,4 +475,12 @@ function LoadModel(object){
 		//, onProgress, onError );
 
 	});
+}
+function ConvertListPosition(list) {
+	let localList = []
+	for(let i = 0; i < list.length; i++){
+			localList.push(TABLE_SIZE.L * list[i][0] - TABLE_SIZE.L  / 2,
+							TABLE_SIZE.H * list[i][1] - TABLE_SIZE.H  / 2 )
+	}
+	return localList;
 }
