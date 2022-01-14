@@ -442,8 +442,8 @@ function initFrame(list) {
 function updateBalls(list){
 	listOfBalls.forEach((element, index) => {
 		const [xPosition, yPosition] = list[index]
-		element.position.x +=   randomIntFromInterval(-10,10)
-		element.position.z  += randomIntFromInterval(-10,10)
+		element.position.x = xPosition
+		element.position.z  = yPosition
 	//	BallChecker(element)
 
 	});
