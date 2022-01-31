@@ -1,0 +1,24 @@
+[{  "name": "top_right",
+    "x": -215,
+    "z": -108
+},
+{"name":"top_left",
+    "x": -215,
+    "z": 108
+},
+{"name":"middle_top",
+    "x": 0,
+    "z": 108
+},
+{"name":"middle_bottom",
+    "x": 0,
+    "z": -108
+},
+{"name":"bottom_right",
+    "x": 215,
+    "z": -108
+},
+{"name":"bottom_left",
+    "x": 215,
+    "z": 108
+}]

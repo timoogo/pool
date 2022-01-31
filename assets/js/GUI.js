@@ -67,7 +67,7 @@ function DebuggerTableGUI(camera, renderer, obj, openFolder = false){
 function DebuggerCueGUI(camera, renderer, obj, openFolder){
  const controls = new OrbitControls(camera, renderer.domElement)
  const gui = new GUI({autoplace: true});
- console.log(obj.position)
+// console.log(obj.position)
  const cueFolder = gui.addFolder('cue options')
     cueFolder.add(obj, 'visible').name("Display")
     cueFolder.add(obj.position, 'x', -500, 500).listen();
