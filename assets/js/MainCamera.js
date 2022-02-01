@@ -34,13 +34,8 @@ const renderer = new THREE.WebGLRenderer();
 const scene = new THREE.Scene();
 
 
-const redBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
-	color: "red"
-}),1)
-
 
 const balls = new THREE.Group();
-balls.add(redBall)
 balls.name = 'balls'
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -81,7 +76,6 @@ let listOfBalls = []
 // });
 
 export function init() {
-	new DebuggerBallGUI(camera, renderer, redBall, true)
 	document.body.appendChild(stats.dom)
 
 	const axisHelper = new THREE.AxesHelper(500)
@@ -99,10 +93,6 @@ export function init() {
 	});
 	const table = LoadModel("DVIC_table")
 	const cue = LoadModel('DVIC_cue')
-
-	redBall.name = "Red ball"
-	redBall.position.y = -11
-	redBall.position.x = 140
 	scene.add(balls);
 	const cameraGUI = new CameraGUI(camera, renderer, true)
 
@@ -114,7 +104,6 @@ export function init() {
 	}, 1000)
 }
 let frames = 0
-
 /**
  * Animate function which call itself for "animating all objects on the scene"
  * verify if balls are in a hole
@@ -142,7 +131,9 @@ export function animate() {
 		camera.aspect = (window.innerWidth / window.innerHeight)
 		camera.updateProjectionMatrix()
 	})
-	updateBalls(listOfBalls)
+
+	
+		updateBalls(listOfBalls)
 
 }
 
@@ -233,10 +224,10 @@ function BallChecker(ball) {
  * @param {*} hole 
  */
 function renderEvent(source, ball, hole) {
+
 	let img = document.createElement('img');
 	let txt = document.createElement('p')
 	img.src = source;
-	img.autoplay = true
 	txt.innerHTML = ball + " in pocket" + hole
 	document.getElementById('container').appendChild(img);
 	document.getElementById('container').appendChild(txt);
@@ -298,20 +289,38 @@ function initFrame(list) {
 	return listOfBalls;
 }
 function updateBalls(list) {
-	listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
+	list.forEach(element =>{
+		scene.remove(element)
+	}) 
+	listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)], [randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
 	listOfBalls = []
-	list.forEach((element, index) => {
+	listOfPosition.forEach(element =>{
 		let ball = new Ball(new THREE.SphereGeometry(6, 30, 30),
-							new THREE.MeshLambertMaterial({color: "yellow"}))
+		 					new THREE.MeshLambertMaterial({color: "yellow"}))
+		ball.position.set(element[0], -11, element[1])
+		scene.add(ball)
+		listOfBalls.push(ball)
+		BallChecker(element)
+
+	})
+	
+	/*list.forEach((element, index) => {
+		console.log(list)
+		// let ball = new Ball(new THREE.SphereGeometry(6, 30, 30),
+		// 					new THREE.MeshLambertMaterial({color: "yellow"}))
 		element.position.x = listOfPosition[index][0]
 		element.position.z = listOfPosition[index][1]
-		scene.add(element)
-		console.log(element.position)
+		console.log(list)
+		setTimeout(()=>{
+			scene.add(element)
+		}, 50)	
 		setTimeout(() => {
 			scene.remove(element)
-		}, 300)
-		listOfBalls.push(ball)
-	});
+		}, 100)$
+		
+		console.log(listOfPosition.length)
+		// listOfBalls.push(ball)
+	});*/
 
 }
 
