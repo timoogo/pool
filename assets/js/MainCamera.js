@@ -57,23 +57,23 @@ let listOfBalls = []
  * Creating the gui for debugging balls and camera
  * Then, we set the light on the scene and we call the renderer. 
  */
-// const socket = io.connect("https://vps.thomasjuldo.com", {
-// 	path: "/realtimepool/socket.io/",
-// 	cors: {
-// 		origin: "*",
-// 		methods: ["GET", "POST"],
-// 	},
-// 	agent: false,
-// 	upgrade: false,
-// 	rejectUnauthorized: false,
-// 	transports: ["websocket"],
-// });
+const socket = io.connect("https://vps.thomasjuldo.com", {
+	path: "/realtimepool/socket.io/",
+	cors: {
+		origin: "*",
+		methods: ["GET", "POST"],
+	},
+	agent: false,
+	upgrade: false,
+	rejectUnauthorized: false,
+	transports: ["websocket"],
+});
 
-// socket.on("new_data", (data) => {
-// 	//  console.log(data);
-// 	//listOfPosition = ConvertListPosition(data)
-// 	listOfPosition = [[0,0], [50,50]]
-// });
+ socket.on("new_data", (data) => {
+ 	  console.log(data);
+ 	listOfPosition = ConvertListPosition(data)
+ 	// listOfPosition = [[0,0], [50,50]]
+ });
 
 export function init() {
 	document.body.appendChild(stats.dom)
@@ -99,7 +99,6 @@ export function init() {
 
 	initFrame(listOfPosition)
 	setInterval(() => {
-		//console.log(frames)
 		frames = 0;
 	}, 1000)
 }
@@ -133,8 +132,10 @@ export function animate() {
 	})
 
 	
+	setTimeout(()=>{
 		updateBalls(listOfBalls)
 
+	}, 1000)
 }
 
 
@@ -270,7 +271,7 @@ function initFrame(list) {
 		let yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 			color: "yellow",
 		}), 3)
-		yellowBall.position.set(ball[0], -11, ball[1])
+	//	yellowBall.position.set(ball[0], -11, ball[1])
 		
 		yellowBall.name = `Ballname:  ${yellowBall.id}`;
 		listOfBalls.push(yellowBall)
@@ -292,7 +293,8 @@ function updateBalls(list) {
 	list.forEach(element =>{
 		scene.remove(element)
 	}) 
-	listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)], [randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
+	
+//	listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
 	listOfBalls = []
 	listOfPosition.forEach(element =>{
 		let ball = new Ball(new THREE.SphereGeometry(6, 30, 30),
