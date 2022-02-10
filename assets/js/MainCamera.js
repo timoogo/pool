@@ -55,7 +55,7 @@ let listOfBalls = []
 /**
  * Init function for loading all the assets of the scenes loader is specific for the table (const object)setting the initial position of the balls
  * Creating the gui for debugging balls and camera
- * Then, we set the light on the scene and we call the renderer. 
+ * Then, we set the light on the scene and we call the renderer.
  */
 let listOfPosition = [[-50, -10], [10, 38]]; //Test
 const socket = io.connect("https://vps.thomasjuldo.com", {
@@ -72,7 +72,7 @@ const socket = io.connect("https://vps.thomasjuldo.com", {
 
  socket.on("new_data", (data) => {
  	  console.log(data);
- 	 listOfPosition = listOfPosition.push(...ConvertListPosition(data))
+ 	 listOfPosition = ConvertListPosition(data)
      //listOfPosition = [[0,0], [50,50]]
 	 console.log(data)
 	 return listOfPosition
@@ -134,7 +134,7 @@ export function animate() {
 		camera.updateProjectionMatrix()
 	})
 
-	
+
 	setTimeout(()=>{
 		updateBalls(listOfBalls)
 
@@ -143,7 +143,7 @@ export function animate() {
 
 
 
-///  
+///
 
 /**
  * Renderer function for setting the size and color
@@ -155,8 +155,8 @@ function Renderer() {
 	renderer.shadowMapSoft = true;
 }
 /**
- * Function for creating all lights of the scene 
- * 
+ * Function for creating all lights of the scene
+ *
  */
 function Light() {
 	let backLight = new THREE.DirectionalLight(0x93C54B, 0.10);
@@ -180,19 +180,19 @@ function Light() {
 /**
  * Returns a random position
  * Used in @BallChecker() (after the ball enters a hole)
- * @param {Integer} min 
- * @param {Integer} max 
- * @returns 
+ * @param {Integer} min
+ * @param {Integer} max
+ * @returns
  */
-function randomIntFromInterval(min, max) { // min and max included 
+function randomIntFromInterval(min, max) { // min and max included
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 /**
  * Verify if the ball is insîde a pocket.
  * If so, the function calls the  @renderEvent() function
  * Then it will place the ball randomly on the table surface
- * Then, finally, will make the ball reappair 
- * @param {Object} ball 
+ * Then, finally, will make the ball reappair
+ * @param {Object} ball
  */
 
 
@@ -200,7 +200,7 @@ function BallChecker(ball) {
 	if (!ball.visible) return;
 
 	// (pocket_radius = 9 + ball_radius = 6)^2 // Hole - ballRadius
-	const DISTANCE_THRESHOLD = 81; 
+	const DISTANCE_THRESHOLD = 81;
 
 	function ballInPocket( holeName) {
 		let gifUrl="https://billiards.colostate.edu/images/one-pocket/straight_back_kiss_beat.gif"
@@ -223,9 +223,9 @@ function BallChecker(ball) {
 
 /**
  * Just create the video / image element, then render it over everything of the screen then place it on the center
- * @param {*} source 
- * @param {*} ball 
- * @param {*} hole 
+ * @param {*} source
+ * @param {*} ball
+ * @param {*} hole
  */
 function renderEvent(source, ball, hole) {
 
@@ -275,7 +275,7 @@ function initFrame(list) {
 			color: "yellow",
 		}), 3)
 		yellowBall.position.set(ball[0], -11, ball[1])
-		
+
 		yellowBall.name = `Ballname:  ${yellowBall.id}`;
 		listOfBalls.push(yellowBall)
 		scene.add(yellowBall)
@@ -295,8 +295,8 @@ function initFrame(list) {
 function updateBalls(list) {
 	list.forEach(element =>{
 		scene.remove(element)
-	}) 
-	
+	})
+
 	//listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
 	listOfBalls = []
 	listOfPosition.forEach(element =>{
@@ -308,7 +308,7 @@ function updateBalls(list) {
 		BallChecker(element)
 
 	})
-	
+
 	/*list.forEach((element, index) => {
 		console.log(list)
 		// let ball = new Ball(new THREE.SphereGeometry(6, 30, 30),
@@ -318,11 +318,11 @@ function updateBalls(list) {
 		console.log(list)
 		setTimeout(()=>{
 			scene.add(element)
-		}, 50)	
+		}, 50)
 		setTimeout(() => {
 			scene.remove(element)
 		}, 100)$
-		
+
 		console.log(listOfPosition.length)
 		// listOfBalls.push(ball)
 	});*/
@@ -333,8 +333,8 @@ function updateBalls(list) {
 function LoadModel(object) {
 	const Loader = new GLTFLoader();
 	Loader.crossOrigin = true;
-	Loader.load("../../models/obj/" + object + ".glb", function (data) {
-		// Loader.load("realtimepool/models/obj/"+object+".glb", function (data) {
+	// Loader.load("../../models/obj/" + object + ".glb", function (data) {
+	Loader.load("realtimepool/models/obj/"+object+".glb", function (data) {
 		const object = data.scene;
 		object.position.y = 87
 
@@ -359,8 +359,8 @@ function LoadModel(object) {
 function ConvertListPosition(list) {
 	let localList = []
 	for (let i = 0; i < list.length; i++) {
-		localList.push(TABLE_SIZE.L * list[i][0] - TABLE_SIZE.L / 2,
-			TABLE_SIZE.H * list[i][1] - TABLE_SIZE.H / 2)
+		localList.push([TABLE_SIZE.L * list[i][0] - TABLE_SIZE.L / 2,
+			TABLE_SIZE.H * list[i][1] - TABLE_SIZE.H / 2])
 	}
 	return localList;
 }
@@ -368,5 +368,5 @@ function ConvertListPosition(list) {
 
 //function UpdateBallsPositions(ballPositions)
 
-/// TODO 
+/// TODO
 // faire une fonction qui update the balls over time sans se préoccuper des sockets
