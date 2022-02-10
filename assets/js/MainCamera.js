@@ -57,6 +57,7 @@ let listOfBalls = []
  * Creating the gui for debugging balls and camera
  * Then, we set the light on the scene and we call the renderer. 
  */
+let listOfPosition = [[-50, -10], [10, 38]]; //Test
 const socket = io.connect("https://vps.thomasjuldo.com", {
 	path: "/realtimepool/socket.io/",
 	cors: {
@@ -71,8 +72,10 @@ const socket = io.connect("https://vps.thomasjuldo.com", {
 
  socket.on("new_data", (data) => {
  	  console.log(data);
- 	listOfPosition = ConvertListPosition(data)
- 	// listOfPosition = [[0,0], [50,50]]
+ 	 listOfPosition = listOfPosition.push(...ConvertListPosition(data))
+     //listOfPosition = [[0,0], [50,50]]
+	 console.log(data)
+	 return listOfPosition
  });
 
 export function init() {
@@ -256,7 +259,7 @@ function renderEvent(source, ball, hole) {
 }
 
 ///
-let listOfPosition = [[-50, -100], [10, 38]]; //Test
+// let listOfPosition = [[-50, -100],[-50, -10], [10, 38]]; //Test
 
 
 // ballPositions
@@ -271,7 +274,7 @@ function initFrame(list) {
 		let yellowBall = new Ball(new THREE.SphereGeometry(6, 30, 30), new THREE.MeshLambertMaterial({
 			color: "yellow",
 		}), 3)
-	//	yellowBall.position.set(ball[0], -11, ball[1])
+		yellowBall.position.set(ball[0], -11, ball[1])
 		
 		yellowBall.name = `Ballname:  ${yellowBall.id}`;
 		listOfBalls.push(yellowBall)
@@ -294,7 +297,7 @@ function updateBalls(list) {
 		scene.remove(element)
 	}) 
 	
-//	listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
+	//listOfPosition = [[randomIntFromInterval(-210, 210),randomIntFromInterval(-108, 108)]]
 	listOfBalls = []
 	listOfPosition.forEach(element =>{
 		let ball = new Ball(new THREE.SphereGeometry(6, 30, 30),
